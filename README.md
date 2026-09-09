@@ -35,7 +35,7 @@ SVMD-DRMT 通过以下完整技术链路应对这一问题：
 The goal is not to claim universal online prognostics. The reported study focuses on **offline, same-condition, cross-bearing RUL prediction** under PRONOSTIA Operating Condition 1.  
 本文并不声称已经解决通用在线预测问题，而是聚焦于 PRONOSTIA 工况 1 下的**离线、同工况、跨轴承 RUL 预测**。
 
-![SVMD-assisted degradation feature representation process](https://cdn.jsdelivr.net/gh/Minamoto-Chisei-Emperor/SVMD-DRMT@main/assets/figures/01_svmd_feature_process.png)
+![SVMD-assisted degradation feature representation process](https://cdn.jsdelivr.net/gh/Minamoto-Chisei-Emperor/SVMD-DRMT@349cf4e/assets/figures/01_svmd_feature_process.png)
 
 *From raw vibration to stabilized degradation trajectories / 从原始振动到稳定退化轨迹*
 
@@ -54,7 +54,7 @@ The method separates the problem into two complementary parts:
    Use multi-scale temporal convolutions and a Transformer to model local-to-global degradation dynamics, then regularize source-bearing representations and impose a soft RUL order constraint.  
    使用多尺度时序卷积和 Transformer 建模从局部到全局的退化动态，再通过源轴承表示正则化和软 RUL 顺序约束改善跨轴承预测。
 
-![Overall SVMD-DRMT workflow](https://cdn.jsdelivr.net/gh/Minamoto-Chisei-Emperor/SVMD-DRMT@main/assets/figures/02_overall_workflow.png)
+![Overall SVMD-DRMT workflow](https://cdn.jsdelivr.net/gh/Minamoto-Chisei-Emperor/SVMD-DRMT@349cf4e/assets/figures/02_overall_workflow.png)
 
 *End-to-end research workflow / 端到端研究流程*
 
@@ -70,7 +70,7 @@ The experiments use the publicly available IEEE PHM 2012 FEMTO Bearing Dataset c
 Each of the seven bearings is held out once as the test bearing, while the remaining six bearings provide the source-bearing training domains. Results are averaged over seven rounds. This protocol measures same-condition cross-bearing generalization, but the current implementation remains an offline, target-aware evaluation because complete unlabeled test-bearing feature statistics and test labels are used for scheduling, early stopping and model selection.  
 7 个轴承分别轮流作为测试轴承，其余 6 个轴承作为源轴承训练域，共进行 7 轮实验并取平均结果。该协议用于评价同工况跨轴承泛化能力，但当前实验仍属于离线、目标感知型评价：测试轴承的完整无标签特征统计量以及测试标签被用于学习率调度、早停和模型选择。
 
-![Leave-one-bearing-out evaluation protocol](https://cdn.jsdelivr.net/gh/Minamoto-Chisei-Emperor/SVMD-DRMT@main/assets/figures/05_loo_protocol.png)
+![Leave-one-bearing-out evaluation protocol](https://cdn.jsdelivr.net/gh/Minamoto-Chisei-Emperor/SVMD-DRMT@349cf4e/assets/figures/05_loo_protocol.png)
 
 *Seven-fold leave-one-bearing-out protocol / 七折留一轴承评价协议*
 
@@ -83,13 +83,13 @@ Each of the seven bearings is held out once as the test bearing, while the remai
 | Frequency domain | 11 | Spectral shape, entropy and four frequency-band energy ratios. | 描述频谱形状、频谱熵以及四个频带能量比例。 |
 | **Total** | **33** | Complementary degradation descriptors. | 互补的退化特征描述。 |
 
-![SVMD feature-process figure](https://cdn.jsdelivr.net/gh/Minamoto-Chisei-Emperor/SVMD-DRMT@main/assets/figures/01_svmd_feature_process.png)
+![SVMD feature-process figure](https://cdn.jsdelivr.net/gh/Minamoto-Chisei-Emperor/SVMD-DRMT@349cf4e/assets/figures/01_svmd_feature_process.png)
 
 ---
 
 ## Method architecture / 方法架构
 
-![Detailed SVMD-DRMT architecture](https://cdn.jsdelivr.net/gh/Minamoto-Chisei-Emperor/SVMD-DRMT@main/assets/figures/03_model_architecture.png)
+![Detailed SVMD-DRMT architecture](https://cdn.jsdelivr.net/gh/Minamoto-Chisei-Emperor/SVMD-DRMT@349cf4e/assets/figures/03_model_architecture.png)
 
 *Detailed model architecture / 模型详细架构*
 
@@ -116,7 +116,7 @@ The fused local representation is passed to a two-layer pre-norm Transformer enc
 Channel gating recalibrates the hidden dimensions. The temporal output is then summarized through two paths: global average pooling describes the overall degradation state, while temporal attention pooling emphasizes informative time points. A vector gate adaptively fuses the two representations before the 48→96→48→1 regression head.  
 通道门控机制重新调整隐藏通道的重要性。随后采用双路径聚合：全局平均池化描述整体退化状态，时间注意力池化强调信息量更高的时刻，最后通过向量门控自适应融合两类表示，并送入 48→96→48→1 回归头。
 
-![Joint optimization mechanism](https://cdn.jsdelivr.net/gh/Minamoto-Chisei-Emperor/SVMD-DRMT@main/assets/figures/04_joint_optimization.png)
+![Joint optimization mechanism](https://cdn.jsdelivr.net/gh/Minamoto-Chisei-Emperor/SVMD-DRMT@349cf4e/assets/figures/04_joint_optimization.png)
 
 *Architecture, joint losses and SHAP interpretation / 架构、联合损失与 SHAP 解释*
 
@@ -156,7 +156,7 @@ The paper compares SVMD-DRMT with Transformer, Informer, GRU, ConvLSTM and Patch
 SVMD-DRMT does not win every conventional metric. Its clearest advantages are the **lowest mean MAE** and **lowest asymmetric Score**, while Informer achieves the lowest mean RMSE and PatchTST achieves the lowest mean MSE, highest mean R² and lowest MAPE. This pattern is important: the contribution of SVMD-DRMT is best understood as a balanced, risk-sensitive and interpretable predictor rather than a universal winner on every metric.  
 SVMD-DRMT 并非在所有传统指标上都排名第一。它最突出的优势是取得**最低平均 MAE**和**最低非对称 Score**；Informer 的平均 RMSE 最低，PatchTST 的平均 MSE、平均 R² 和 MAPE 更优。由此可见，SVMD-DRMT 更适合被理解为一个兼顾绝对误差、风险敏感性和可解释性的平衡型预测器，而不是在每一项指标上都绝对领先的模型。
 
-![Overall model comparison](https://cdn.jsdelivr.net/gh/Minamoto-Chisei-Emperor/SVMD-DRMT@main/assets/figures/06_model_comparison.jpg)
+![Overall model comparison](https://cdn.jsdelivr.net/gh/Minamoto-Chisei-Emperor/SVMD-DRMT@349cf4e/assets/figures/06_model_comparison.jpg)
 
 *Mean metrics and variability across seven LOO experiments / 七轮留一轴承实验的平均指标与波动*
 
@@ -167,22 +167,22 @@ SVMD-DRMT 并非在所有传统指标上都排名第一。它最突出的优势�
 Different bearings exhibit different prediction difficulty. Bearing1_3 is relatively regular, Bearing1_4 shows intermediate deviations, and Bearing1_7 is more challenging with stronger local fluctuations. SVMD-DRMT performs close to the best models on regular cases and shows a particularly favorable result on Bearing1_7 under the reported comparison.  
 不同轴承具有不同的预测难度。Bearing1_3 的退化轨迹相对规则，Bearing1_4 存在中等程度偏差，而 Bearing1_7 的局部波动更明显、预测难度更高。在规则样本上，SVMD-DRMT 与最优模型接近；在论文对比中，它在 Bearing1_7 上表现尤其突出。
 
-![Representative-bearing predictions and error distributions](https://cdn.jsdelivr.net/gh/Minamoto-Chisei-Emperor/SVMD-DRMT@main/assets/figures/07_representative_bearings.jpg)
+![Representative-bearing predictions and error distributions](https://cdn.jsdelivr.net/gh/Minamoto-Chisei-Emperor/SVMD-DRMT@349cf4e/assets/figures/07_representative_bearings.jpg)
 
 *Representative bearings: Bearing1_3, Bearing1_4 and Bearing1_7 / 代表性轴承：Bearing1_3、Bearing1_4 与 Bearing1_7*
 
-![Asymmetric Score heatmap](https://cdn.jsdelivr.net/gh/Minamoto-Chisei-Emperor/SVMD-DRMT@main/assets/figures/08_score_heatmap.jpg)
+![Asymmetric Score heatmap](https://cdn.jsdelivr.net/gh/Minamoto-Chisei-Emperor/SVMD-DRMT@349cf4e/assets/figures/08_score_heatmap.jpg)
 
 *Raw cumulative Score for within-bearing model comparison / 用于轴承内模型比较的原始累积 Score*
 
 The heatmap should be interpreted within each bearing because different bearings contain different numbers of test windows. The seven-fold average Score in the comparison table is the appropriate summary of overall risk-sensitive performance.  
 由于不同轴承包含的测试窗口数量不同，热力图应主要用于同一轴承内部的模型比较；整体风险敏感性能应以对比表中的七折平均 Score 为准。
 
-![Multi-bearing RUL prediction trajectories](https://cdn.jsdelivr.net/gh/Minamoto-Chisei-Emperor/SVMD-DRMT@main/assets/figures/09_bearing_trajectories.jpg)
+![Multi-bearing RUL prediction trajectories](https://cdn.jsdelivr.net/gh/Minamoto-Chisei-Emperor/SVMD-DRMT@349cf4e/assets/figures/09_bearing_trajectories.jpg)
 
 *Prediction trajectories across Bearing1_1–Bearing1_7 / Bearing1_1–Bearing1_7 的预测轨迹*
 
-![Bearing-level metric comparisons](https://cdn.jsdelivr.net/gh/Minamoto-Chisei-Emperor/SVMD-DRMT@main/assets/figures/10_bearing_metrics.jpg)
+![Bearing-level metric comparisons](https://cdn.jsdelivr.net/gh/Minamoto-Chisei-Emperor/SVMD-DRMT@349cf4e/assets/figures/10_bearing_metrics.jpg)
 
 *Six metrics at the bearing level / 轴承级六项指标对比*
 
@@ -193,7 +193,7 @@ The heatmap should be interpreted within each bearing because different bearings
 SHAP analysis is performed on 496 test samples containing all 33 multi-domain features. The most influential feature is `band_energy_ratio_2` (mean absolute SHAP value 0.017254), followed by `hilbert_frequency_mean` (0.006432) and `spectral_spread` (0.005438). Frequency-band energy redistribution, instantaneous-frequency structure and spectral-shape descriptors dominate the learned feature-use pattern, while time-domain statistics provide complementary information.  
 SHAP 分析基于包含全部 33 个多域特征的 496 个测试样本。影响最大的特征是 `band_energy_ratio_2`（平均绝对 SHAP 值 0.017254），其次为 `hilbert_frequency_mean`（0.006432）和 `spectral_spread`（0.005438）。模型主要利用频带能量重分布、瞬时频率结构和频谱形状信息，同时结合时域统计特征作为补充。
 
-![SHAP interpretation](https://cdn.jsdelivr.net/gh/Minamoto-Chisei-Emperor/SVMD-DRMT@main/assets/figures/11_shap_interpretation.jpg)
+![SHAP interpretation](https://cdn.jsdelivr.net/gh/Minamoto-Chisei-Emperor/SVMD-DRMT@349cf4e/assets/figures/11_shap_interpretation.jpg)
 
 *Global importance, beeswarm distribution, dependence and local explanation / 全局重要性、蜂群图、依赖关系与局部解释*
 
@@ -292,4 +292,3 @@ When the implementation is released, the intended sequence is:
 
 Please follow the original FEMTO/PRONOSTIA dataset terms and the repository license when using or redistributing the materials. The results are intended for academic research and methodological demonstration, not direct safety-critical maintenance decisions without independent validation.  
 使用或重新分发相关材料时，请遵循 FEMTO/PRONOSTIA 数据集原始条款和仓库许可证。本文结果主要用于学术研究与方法展示，未经独立验证，不应直接用于安全关键型维护决策。
-
